@@ -1,42 +1,35 @@
-import React, { Component, useState } from "react";
-import '../styles/App.css';
+// src/App.js
+import React, { useState } from 'react';
+import './App.css';
+import GolfBall from './GolfBall';
 
-class App extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            renderBall: false,
-            posi : 0,
-            ballPosition: { left: "0px" }
-        };
-        this.renderChoice = this.renderBallOrButton.bind(this)
-        this.buttonClickHandler = this.buttonClickHandler.bind(this)
-    };
+function App() {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [ballPosition, setBallPosition] = useState(0);
 
-    buttonClickHandler() {
-   
-   }
-    renderBallOrButton() {
-		if (this.state.renderBall) {
-		    return <div className="ball" style={this.state.ballPosition}></div>
-		} else {
-		    return <button onClick={this.buttonClickHandler} >Start</button>
-		}
+  const handleStartClick = () => {
+    setGameStarted(true);
+  };
+
+  const handleKeyDown = (e) => {
+    if (gameStarted) {
+      if (e.key === 'ArrowRight' || e.keyCode === 39) {
+        // Move the ball 5 pixels to the right
+        setBallPosition((prevPosition) => prevPosition + 5);
+      }
     }
+  };
 
-    // bind ArrowRight keydown event
-    componentDidMount() {
-      
-    }
-
-    render() {
-        return (
-            <div className="playground">
-                {this.renderBallOrButton()}
-            </div>
-        )
-    }
+  return (
+    <div className="App" onKeyDown={handleKeyDown} tabIndex="0">
+      {!gameStarted ? (
+        <button className="start" onClick={handleStartClick}>
+          Start
+        </button>
+      ) : null}
+      {gameStarted ? <GolfBall position={ballPosition} /> : null}
+    </div>
+  );
 }
-
 
 export default App;
